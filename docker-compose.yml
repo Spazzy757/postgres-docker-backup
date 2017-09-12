@@ -1,0 +1,22 @@
+# EXAMPLE COMPOSE FILE
+version: "2.1"
+services:
+  backup:
+    build: ./backup
+    # ROTATED BACKUP
+    command: bash ./scripts/pg_backup_rotated.sh
+    # NORMAL BACKUP
+    # Command: bash ./scripts/pg_backup_rotated.sh
+    environment:
+    # This allows for 7 days worth of backups
+      HOSTNAME: 'db'
+      USERNAME: 'postgres'
+      BACKUP_DIR: '/db-backups/'
+      ENABLE_PLAIN_BACKUPS: 'yes'
+      ENABLE_CUSTOM_BACKUPS: 'no'
+      ENABLE_GLOBALS_BACKUPS: 'yes'
+      SCHEMA_ONLY_LIST: ""
+      DAYS_TO_KEEP: 7
+    volumes:
+    # This Allows for access to the DB Files at ./db-backups
+      - ./db-backups:/db-backups/
